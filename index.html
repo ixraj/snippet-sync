@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnippetSync</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SnippetSync</h1>
+            <div class="header-actions">
+                <button id="exportBtn" class="fancy-btn secondary" title="Export all notes">
+                    Export
+                </button>
+                <button id="viewNotesBtn" class="fancy-btn secondary" title="View saved notes">
+                    View Notes
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    🌙
+                </button>
+            </div>
+        </div>
+
+        <form id="snippetForm" autocomplete="off">
+            <div class="input-group">
+                <input type="text" id="titleInput" placeholder="Enter a title..."
+                    class="fancy-input" required />
+            </div>
+
+            <div class="input-group">
+                <select id="categorySelect" class="fancy-select" required>
+                    <option value="">Select Category</option>
+                    <option value="code">Code</option>
+                    <option value="note">Note</option>
+                    <option value="todo">Todo</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <textarea id="pasteArea" placeholder="Paste your code or notes here..."
+                class="fancy-textarea" required></textarea>
+
+            <div class="buttons">
+                <button type="submit" id="saveButton" class="fancy-btn primary">
+                    Save
+                </button>
+                <button type="button" id="clearButton" class="fancy-btn secondary">
+                    Clear
+                </button>
+                <button type="button" id="copyButton" class="fancy-btn tertiary">
+                    Copy
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+

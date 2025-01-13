@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Notes - SnippetSync</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Saved Notes</h1>
+            <div class="header-actions">
+                <button id="homeBtn" class="fancy-btn secondary" title="Return to home">
+                    Home
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    🌙
+                </button>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search notes..." 
+                class="fancy-input"
+            />
+            <select id="filterCategory" class="fancy-select">
+                <option value="">All Categories</option>
+                <option value="code">Code</option>
+                <option value="note">Note</option>
+                <option value="todo">Todo</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+
+        <div id="notesList" class="notes-list">
+            <!-- Notes will be dynamically inserted here -->
+        </div>
+
+        <div id="noteModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle"></h2>
+                    <button class="close-btn" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <span id="modalCategory"></span>
+                    <div id="modalContent"></div>
+                    <div class="modal-footer">
+                        <span class="note-date" id="modalDate"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
