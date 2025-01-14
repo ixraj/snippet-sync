@@ -138,6 +138,96 @@ document.addEventListener("DOMContentLoaded", () => {
         return noteItem;
     }
 
+    function formatNotesForPDF(notes) {
+        const container = document.createElement('div');
+        container.style.padding = '20px';
+        container.style.fontFamily = 'Arial, sans-serif';
+
+        notes.forEach(note => {
+            // Note Header Section
+            const noteHeader = document.createElement('div');
+            noteHeader.style.marginBottom = '20px';
+
+            // Title
+            const title = document.createElement('h2');
+            title.textContent = note.title;
+            title.style.color = '#2c3e50';
+            title.style.marginBottom = '10px';
+
+            // Category
+            const category = document.createElement('div');
+            category.textContent = `Category: ${note.category}`;
+            category.style.color = '#7f8c8d';
+            category.style.marginBottom = '10px';
+
+            // Content
+            const content = document.createElement('div');
+            content.style.marginBottom = '15px';
+            content.style.whiteSpace = 'pre-wrap';
+            content.style.backgroundColor = note.category === 'code' ? '#f7f9fa' : 'transparent';
+            content.style.padding = note.category === 'code' ? '15px' : '0';
+            content.style.borderRadius = '5px';
+            content.style.color = '#333333';
+
+            if (note.category === 'code') {
+                content.style.fontFamily = 'Source Code Pro, serif';
+            } else {
+                content.style.fontFamily = 'Poppins, serif';
+            }
+
+            content.textContent = note.content;
+
+            // Timestamp
+            const timestamp = document.createElement('div');
+            timestamp.textContent = new Date(note.timestamp).toLocaleString();
+            timestamp.style.color = '#95a5a6';
+            timestamp.style.fontSize = '14px';
+
+            // Divider
+            const divider = document.createElement('hr');
+            divider.style.margin = '30px 0';
+            divider.style.border = '1px solid #ecf0f1';
+
+            // Append all elements
+            noteHeader.appendChild(title);
+            noteHeader.appendChild(category);
+            noteHeader.appendChild(content);
+            noteHeader.appendChild(timestamp);
+            noteHeader.appendChild(divider);
+
+            container.appendChild(noteHeader);
+        });
+
+        return container;
+    }
+
+    function exportNotesToPDF() {
+        const notes = JSON.parse(localStorage.getItem("notes")) || [];
+        if (notes.length === 0) {
+            showAlert("No notes to export!");
+            return;
+        }
+
+        const notesContainer = formatNotesForPDF(notes);
+        document.body.appendChild(notesContainer);
+
+        const options = {
+            margin: 10,
+            filename: 'notes.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(notesContainer).set(options).save().then(() => {
+            document.body.removeChild(notesContainer);
+            showAlert("Notes exported as PDF successfully!");
+        });
+    }
+
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -297,8 +387,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (pasteArea) pasteArea.value = "";
     }
 
+    // Initialize Theme
     initializeTheme();
 
+    // Event Listeners
     if (themeToggle) {
         themeToggle.addEventListener("click", toggleTheme);
     }
@@ -340,35 +432,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (exportBtn) {
-        exportBtn.addEventListener("click", () => {
-            const notes = JSON.parse(localStorage.getItem("notes")) || [];
-            if (notes.length === 0) {
-                showAlert("No notes to export!");
-                return;
-            }
-
-            const exportData = JSON.stringify(notes, null, 2);
-            const blob = new Blob([exportData], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "snippetsync-export.json";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showAlert("Notes exported successfully!");
-        });
+        exportBtn.addEventListener("click", exportNotesToPDF);
     }
 
+    // Escape key to close modal
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal?.style.display === "flex") {
             modal.style.display = "none";
         }
     });
 
+    // Initial display of notes
     if (notesList) {
         displayNotes();
     }
